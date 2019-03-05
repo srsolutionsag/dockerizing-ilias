@@ -35,6 +35,26 @@ services:
     ports: []
     command: cron -f
 
+  # ilServer
+  ilserver:
+    image: sturai/ilias-ilserver
+    networks:
+      - ilias-net
+    depends_on:
+      - ilias
+    volumes:
+      - type: volume
+        source: ilias-lucenedata
+        target: /var/lucenedata/ilias
+      - type: volume
+        source: ilias-data
+        target: /app/data
+        read_only: true
+      - type: volume
+        source: ilias-iliasdata
+        target: /app/iliasdata
+        read_only: true
+
   # MySQL
   mysql:
     image: mysql:5.7
@@ -54,6 +74,7 @@ services:
 volumes:
   ilias-data:
   ilias-iliasdata:
+  ilias-lucenedata:
   mysql-data:
 
 networks:
