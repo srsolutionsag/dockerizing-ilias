@@ -2,7 +2,7 @@ version: '3.2'
 
 services:
   # Webserver
-  ilias:
+  ilias: &ilias
     image: sturai/ilias
     ports:
       - 8080:80
@@ -26,6 +26,14 @@ services:
       - ILIAS_ROOT_PASSWORD=root
       - ILIAS_SETUP_PASSWORD=root
       - ILIAS_CLIENT_NAME=default
+
+  # Cron
+  cron:
+    # Reuse configuration from webserver
+    <<: *ilias
+    # Reset ports to avoid conflict with service 'ilias'
+    ports: []
+    command: cron -f
 
   # MySQL
   mysql:
